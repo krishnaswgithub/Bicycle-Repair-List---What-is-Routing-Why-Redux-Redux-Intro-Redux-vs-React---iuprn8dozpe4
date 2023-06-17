@@ -50,7 +50,7 @@ const App = ({
   return (
     <div>
       <h1>Bicycle Repair App</h1>
-      <form>
+      <form onSubmit={(event) => {event.preventDefault()}}>
         <label htmlFor="owner-text-box">Owner:</label>
         <input
           type="text"
@@ -72,7 +72,7 @@ const App = ({
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
-        <button type="button" onClick={editMode ? handleUpdateRepair : handleAddRepair}>
+        <button onClick={editMode ? handleUpdateRepair : handleAddRepair}>
           {editMode ? 'Update' : '+'}
         </button>
       </form>
@@ -80,13 +80,13 @@ const App = ({
         {repairs.map((repair) => (
           <li key={repair.id} className="repair-item">
             {repair.owner}, {repair.model}, {repair.description}
-            <button type="button" onClick={() => handleEditTask(repair.id, repair.owner, repair.model, repair.description)}>
+            <button  onClick={() => handleEditTask(repair.id, repair.owner, repair.model, repair.description)}>
               Update
             </button>
-            <button type="button" onClick={() => removeRepair(repair.id)}>
+            <button  onClick={() => removeRepair(repair.id)}>
               Delete
             </button>
-            <button type="button" onClick={() => resolveRepair(repair.id)}>
+            <button  onClick={() => resolveRepair(repair.id)}>
               {repair.resolved ? 'Undo' : 'Done'}
             </button>
           </li>
