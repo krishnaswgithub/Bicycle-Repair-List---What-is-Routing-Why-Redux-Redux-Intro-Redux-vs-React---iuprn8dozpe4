@@ -14,9 +14,9 @@ export const repairAdded = (var1,va2) => {
 
 */
 
-export const addRepair = (owner, model, description) => {
+export const repairAdded = ({ owner, model, description }) => {
   return {
-    type: 'repairAdded',
+    type: "repairAdded",
     payload: {
       owner,
       model,
@@ -25,27 +25,25 @@ export const addRepair = (owner, model, description) => {
   };
 };
 
-export const removeRepair = (id) => {
+export const repairRemoved = (id) => {
   return {
-    type: 'repairRemoved',
+    type: "repairRemoved",
     payload: {
       id,
     },
   };
 };
-
-export const resolveRepair = (id) => {
+export const repairResolved = (id) => {
   return {
-    type: 'repairResolved',
+    type: "repairResolved",
     payload: {
       id,
     },
   };
 };
-
-export const updateRepair = (id, owner, model, description) => {
+export const repairUpdate = ({ id, owner, model, description }) => {
   return {
-    type: 'repairUpdated',
+    type: "repairUpdate",
     payload: {
       id,
       owner,
@@ -54,10 +52,9 @@ export const updateRepair = (id, owner, model, description) => {
     },
   };
 };
-
-export const editTask = (id, owner, model, description) => {
+export const editTask = ({ id, owner, model, description }) => {
   return {
-    type: 'editTask',
+    type: "editTask",
     payload: {
       id,
       owner,
