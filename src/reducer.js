@@ -20,80 +20,72 @@ const reducer = (state = [],action = {}) => {
 export default reducer;
 */
 
-const initialState = {
+import { v4 as uuidv4 } from "uuid";
+import { combineReducers } from "redux";
+
+const initalState = {
   items: [],
-  item: {
-    id: 0,
-    owner: '',
-    model: '',
-    description: '',
-  },
+  item: { owner: "", model: "", description: "", resolved: false },
   editMode: false,
 };
 
-const reducer = (state = initialState, action) => {
+function listReducer(state = initalState, action) {
   switch (action.type) {
-    case 'repairAdded':
+    case "repairAdded":
+      action.payload.id = uuidv4();
+      action.payload.resolved = false;
       return {
         ...state,
-        items: [
-          ...state.items,
-          {
-            id: state.items.length + 1,
-            owner: action.payload.owner,
-            model: action.payload.model,
-            description: action.payload.description,
-            resolved: false,
-          },
-        ],
-      };
-    case 'repairRemoved':
-      return {
-        ...state,
-        items: state.items.filter((repair) => repair.id !== action.payload.id),
-      };
-    case 'repairResolved':
-      return {
-        ...state,
-        items: state.items.map((repair) =>
-          repair.id === action.payload.id ? { ...repair, resolved: !repair.resolved } : repair
-        ),
-      };
-    case 'repairUpdated':
-      return {
-        ...state,
-        items: state.items.map((repair) =>
-          repair.id === action.payload.id
-            ? {
-                ...repair,
-                owner: action.payload.owner,
-                model: action.payload.model,
-                description: action.payload.description,
-              }
-            : repair
-        ),
-        item: {
-          id: 0,
-          owner: '',
-          model: '',
-          description: '',
-        },
+        items: state.items.concat([action.payload]),
+        item: { owner: "", model: "", description: "" },
         editMode: false,
       };
-    case 'editTask':
+
+    case "repairRemoved":
       return {
         ...state,
-        item: {
-          id: action.payload.id,
-          owner: action.payload.owner,
-          model: action.payload.model,
-          description: action.payload.description,
-        },
+        items: state.items.filter((item) => item.id !== action.payload.id),
+        item: { owner: "", model: "", description: "" },
+        editMode: false,
+      };
+    case "repairResolved":
+      return {
+        ...state,
+        items: state.items.map((item) => {
+          if (item.id == action.payload.id) {
+            item.resolved = !item.resolved;
+          }
+          return item;
+        }),
+        item: { owner: "", model: "", description: "" },
+      };
+    case "editTask":
+      return {
+        ...state,
+        item: action.payload,
         editMode: true,
+      };
+    case "repairUpdate":
+      return {
+        ...state,
+        items: state.items.map((item) => {
+          if (item.id == action.payload.id) {
+            item.owner = action.payload.owner;
+            item.model = action.payload.model;
+            item.description = action.payload.description;
+          }
+          return item;
+        }),
+        item: { owner: "", model: "", description: "" },
+        editMode: false,
       };
     default:
       return state;
   }
-};
+}
 
-export default reducer;
+const reducers = combineReducers({
+  bicycle: listReducer,
+});
+
+export default reducers;
